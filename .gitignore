@@ -8,4 +8,6 @@ db.sqlite3-journal
 static
 media
 env
-local_settings.py
+finesauces_project/local_settings.py
+venv/
+.idea/
