@@ -1,5 +1,7 @@
 from django.db import models
 from listings.models import Product
+from django.conf import settings
+from django.urls import reverse
 
 ORDER_STATUS = [
     ('Created', 'Created'),
@@ -15,6 +17,13 @@ TRANSPORT_CHOICES = [
 ]
 
 class Order(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='orders',
+        blank=True,
+        null=True
+    )
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
@@ -29,6 +38,11 @@ class Order(models.Model):
     note = models.TextField(blank=True)
     transport = models.CharField(max_length=20, choices=TRANSPORT_CHOICES)
     transport_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    def get_absolute_url(self):
+        return reverse(
+            'orders:order_detail',
+            args=[self.id]
+        )
 
     class Meta:
         ordering = ('-created',)
